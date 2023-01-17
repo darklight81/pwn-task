@@ -26,8 +26,6 @@
 const props = defineProps<{asset: Record<string, unknown>}>()
 const emit = defineEmits<{(e: 'customChange', asset: Record<string, unknown>): void}>()
 
-console.log(props.asset)
-
 let hasInput = true
 if (props.asset.asset_contract)
   hasInput = props.asset.asset_contract.schema_name === "ERC1155"
@@ -42,6 +40,7 @@ const sendChange = (event: unknown) => {
           alert("Please enter a valid amount")
           return
         }
+        event.target.btn.innerText = "Remove token"
         emit('customChange', {asset: props.asset, amount: amount, add: true})
       } else {
         emit('customChange', {asset: props.asset, amount: -1, add: true})
@@ -51,7 +50,6 @@ const sendChange = (event: unknown) => {
       event.target.btn.innerText = "Add token"
       emit('customChange', {asset: props.asset, amount: -1, add: false})
     }
-    event.target.btn.innerText = "Remove token"
     return
   }
 

@@ -56,14 +56,12 @@ let jsonAssets = await openseaRes.json()
 let assets : Array<OpenseaAsset | MoralisAsset> = jsonAssets.assets
 jsonAssets = await moralisRes.json();
 jsonAssets.map((asset: MoralisAsset) => {assets.push(asset)})
-console.log(assets)
 
 async function handleToken(token: Token, tokensToWrapMultiToken){
   if(!token.asset.asset_contract){
     // Token is from Moralis
     const tokenContract = Erc20__factory.connect(token.asset.token_address, signer);
     const balance = await tokenContract.balanceOf(signerAddress);
-    console.log(balance.toString())
 
     // todo: make amount type of BigNumber and check if it is greater than balance
     const amount = token.amount * 10 ** token.asset.decimals;
@@ -117,11 +115,11 @@ function logChange({asset, amount, add}) {
     tokensToWrap.push({asset, amount})
   else
     tokensToWrap.splice(tokensToWrap.findIndex(token => token.asset.id === asset.id), 1)
-  console.log(tokensToWrap)
 }
 
 async function unwrapTokens(){
-  if (tokensToWrap.length === 1 && tokensToWrap[0].asset.asset_contract.address.toUpperCase() === TokenBundlerAddress.toUpperCase()){
+  if (tokensToWrap.length === 1 && tokensToWrap[0].asset.asset_contract &&
+      tokensToWrap[0].asset.asset_contract.address.toUpperCase() === TokenBundlerAddress.toUpperCase()){
     const tokenBundlerContract = TokenBundler__factory.connect(TokenBundlerAddress, signer);
     await tokenBundlerContract.unwrap(tokensToWrap[0].asset.token_id, {gasLimit: 500000}).then(() => {
       error.value = null;
