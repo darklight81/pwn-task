@@ -1,7 +1,7 @@
 <template>
   <Suspense>
     <template #default>
-      <HelloWorld/>
+      <MainDashboard/>
     </template>
     <template #fallback>
       <div>Loading...</div>
@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import HelloWorld from './components/HelloWorld.vue';
+import MainDashboard from './components/MainDashboard.vue';
 
 </script>
 
